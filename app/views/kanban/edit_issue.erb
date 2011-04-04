@@ -1,0 +1,16 @@
+<div id="edit-issue-form" style="position: relative">
+	<form method="post" action="/kanban/edit_issue">
+		<input type="hidden" name="issue_id" value="<%= @issue.id %>">
+		<input type="hidden" name="<%= request_forgery_protection_token %>" value="<%= form_authenticity_token %>">
+	
+		<h3>Issue #<%= @issue.id %>: <%= h @issue.subject %></h3>
+		<label>Assigned to:</label><br />
+		<%= select('issue', 'assigned_to_id', (["--- #{l(:actionview_instancetag_blank_option)} ---"] + User.find(:all, :conditions => 'status = 1').collect { |c| [c.name, c.id] } ) ) %></p>
+		
+		<br />
+		<label>Estimated hours:</label><br />
+		<input type="text" name="issue[estimated_hours]" value="<%= @issue.estimated_hours ? @issue.estimated_hours : 0 %>"/>
+		<br /><br />
+		<input type="submit" value="Update" />
+	</form>
+</div>

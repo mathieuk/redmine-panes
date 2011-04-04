@@ -1,0 +1,20 @@
+<ol class="stories">
+<% stories.each do |story| %>
+	<li>
+		<div class="story-wrapper" id="story-<%= story.id %>" data-issueid="<%= story.id %>">
+			<div class="story <%=story.tracker.name.downcase %> <%=story.priority.name.downcase%>" >
+				<div class="emblem"></div>
+				<a href="#">#<%= story.id %>: <%= story.subject %></a><br /><br />
+				<small>
+					<% if story.assigned_to.nil? %>
+						[NOT ASSIGNED]
+					<% else %>
+						<%= story.assigned_to.name(:firstname) %>
+					<% end %>
+				/ ETA: <%= story.estimated_hours ? story.estimated_hours.to_s + 'H' : '-' %></small>
+			</div>
+			<%= avatar(story.assigned_to, :size => "32") if story.respond_to?(:assigned_to) %>			
+		</div>
+	</li>
+<% end -%>
+</ol>

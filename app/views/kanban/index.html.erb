@@ -1,0 +1,120 @@
+<h2>Kanban Board</h2>
+
+<div id="dialog-container" style="width: 800px"></div>
+
+<table width="100%" cellspacing=0 border=1>
+	<tr class="header">
+		<% 
+			@pane_order.each do |key|
+				pane = @panes[key]
+		%>
+			<% if pane.instance_of? Multipane %>
+				<td colspan="<%=pane.panes.count%>"><%=pane.title%> (<%=pane.wip_limit%>)</td>
+			<% else %>
+				<td><%=pane.title%> (<%=pane.wip_limit%>)</td>
+			<% end %>
+		<% end %>
+	</tr>
+	
+	<% if @have_multipanes %>
+	<tr class="header">
+			<% 
+				@pane_order.each do |key|
+					pane = @panes[key]
+			%>
+			<% if pane.instance_of? Multipane %>
+				<% pane.panes.each do |subkey, subpane| %>
+					<td><%=subpane.title%></td>
+				<% end %>
+			<% else %>
+				<td>&nbsp;</td>
+			<% end %>
+		<% end %>
+	</tr>
+	<% end %>
+	
+	<!-- ISSUES -->
+	<tr>
+		<% 
+			@pane_order.each do |key|
+				pane = @panes[key]
+		%>
+			<% if pane.instance_of? Multipane %>
+				<% pane.panes.each do |subkey, subpane| %>
+					<td valign="top" class="pane <%= subkey %>" data-statusid="<%= subpane.issuestatus.id; %>">
+						<%= render :partial => 'stories', :object => subpane.issues %>
+					</td>
+				<% end %>
+			<% else %>
+				<td valign="top" class="pane <%= key %>" data-statusid="<%= pane.issuestatus.id; %>">
+					<%= render :partial => 'stories', :object => pane.issues %>
+				</td>
+			<% end %>
+		<% end %>
+	</tr>
+	<!-- <tr>
+		<td colspan="5">
+			<h3 style="border: 0">Urgent</h3>
+		</td>
+	</tr>
+	<tr class="urgent">
+		<% 
+			@pane_order.each do |key|
+				pane = @panes[key]
+		%>
+			<% if pane.instance_of? Multipane %>
+				<% pane.panes.each do |subkey, subpane| %>
+					<td valign="top" class="pane <%= subkey %>" data-statusid="<%= subpane.issuestatus.id; %>">
+					</td>
+				<% end %>
+			<% else %>
+				<td valign="top" class="pane <%= key %>" data-statusid="<%= pane.issuestatus.id; %>">
+				</td>
+			<% end %>
+		<% end %>
+	</tr> -->
+	<!-- <tr>
+		<td>
+			<h3 style="border: 0">Criteria</h3>
+		</td>
+		<td colspan="2">
+			<ul>
+				<li>Code complete</li>
+				<li>Unit tests</li>
+				<li>Integration tests</li>
+			</ul>
+		</td>
+		<td>
+			<ul>
+				<li>Inform stakeholder of test availability</li>
+				<li>Test by collegue, test by stakeholder (when applicable)</li>
+			</ul>
+		</td>
+		<td></td>
+	</tr> -->
+</table>
+
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'stories', :plugin => 'redmine_kanban' %>
+	<%= stylesheet_link_tag 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/base/jquery-ui.css' %>
+	
+    <%= javascript_include_tag 'https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js' %>
+    <%= javascript_include_tag 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js' %>
+    <%= javascript_include_tag 'board', :plugin => 'redmine_kanban' %>
+<% end %>
+
+<script>
+	if(RB==null){
+	  var RB = {};
+	}
+
+	RB.constants = {
+	  project_id: <%= @project.id %>,
+	  protect_against_forgery: <%= protect_against_forgery? ? "true" : "false" %>,
+	  request_forgery_protection_token: '<%= request_forgery_protection_token %>',
+	  form_authenticity_token: '<%= form_authenticity_token %>'
+	}
+	
+	RK.pane_order = <%= @pane_order.to_json %>;
+	RK.panes = <%= @pane_js_data.to_json %>;
+</script>

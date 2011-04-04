@@ -1,0 +1,107 @@
+.pane {
+	border: 1px solid black;
+	
+	width: 160px;
+}
+
+.bug {
+	background: #FFDBE1;
+}
+
+.feature {
+	background: #CDE2FF;
+}
+
+.refactoring {
+	background: #C2E2B9;
+}
+.story {
+	position: relative;
+	border: 1px solid #B3B3B3;
+	border: 1px solid #6B7699;
+	/*border-bottom: 1px solid #999; */
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+	-moz-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+	-webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+	color: #333;
+	display: block;
+	font-family: myriad-pro-condensed-1, myriad-pro-condensed-2, 'Helvetica Neue', Arial, 'Lucida Grande', sans-serif;
+	font-weight: 700;
+	font-size: 11px;
+	width: 125px;
+	text-decoration: none;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+	vertical-align: top;
+	padding: 5px;
+	margin: 4px 2px;
+	z-index: 1;
+}
+
+.story-wrapper {
+	position: relative;
+	width:137px;
+}
+
+.story-wrapper .gravatar {
+	position: absolute;
+	top: 3px;
+	right: -32px;
+	z-index: 0;
+}
+
+.story small {
+	color: #7C7599;
+}
+
+.story a { color: #333; font-weight: bold; }
+
+.story:hover {
+	cursor: move;
+}
+
+.emblem {
+
+}
+
+.immediate .emblem {
+	height: 16px;
+	width: 16px;
+	padding: 2px;
+	background: url(../images/exclamation.png) no-repeat bottom right;
+	float: left;
+}
+
+/* too lazy to figure out what the problem seems to be with the dialog glueing to the left border */
+.ui-dialog { 
+	left: 500px !important; 
+}
+
+.urgent .emblem {
+	height: 16px;
+	width: 16px;
+	margin: 2px;
+	background: url(../images/exclamation.png) no-repeat bottom right;
+	float: left;
+	display: inline-block;
+}
+
+.pane.over { 
+	background-color: #E4DFEE;
+}
+ol.stories {
+	list-style-type: none;
+	padding: 0;
+}
+
+.urgent .pane {
+	min-height: 50px;
+}
+
+table  { border-collapse: collapse; border-spacing: 0;}
+
+.header td { text-align: center; }
+
+.header td { border: 1px solid black;}
