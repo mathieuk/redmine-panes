@@ -3,8 +3,9 @@ jQuery.noConflict();
 	
 	function move_story_to_pane(story, pane)
 	{
-		story.parentNode.removeChild(story);
-			    
+		var li_container = story.parentNode;
+		li_container.parentNode.removeChild(li_container);
+		
 		var li = $('<li />');
 		li.append(story);
 		$(pane).find('ol').append(li);
@@ -55,11 +56,28 @@ jQuery.noConflict();
 				function (e) 
 				{
 					e.preventDefault();
-					if (e.stopPropagation) e.stopPropagation(); // stops the browser from redirecting...why???
-					
+					if (e.stopPropagation) e.stopPropagation(); // stops the browser from redirecting...why???					
 					$(this).removeClass("over");
 					
-					var dropped_story = document.getElementById(e.dataTransfer.getData('Text'));
+					// Find the Work In Progress Limit for this pane. 
+					wiplimit = 0; // 0 = unlimited
+					current_wip_in_pane = 0;
+					
+					if ($(this).data('parentpane'))
+					{
+						parentpane          = $(this).data('parentpane')
+						wiplimit            = $('#pane-' + parentpane).data('wiplimit')
+						current_wip_in_pane = $('td[data-parentpane="' + parentpane + '"]').find('ol.stories').children().length;
+					}
+					
+					var dropped_story = document.getElementById(e.dataTransfer.getData('Text'));					
+					if (wiplimit > 0 && current_wip_in_pane + 1 > wiplimit)
+					{
+						$(this).effect('highlight', {color: '#FD0B00'}, 1500);
+						return false;
+					}
+						
+
 					src_pane = $(dropped_story).parents('.pane')[0];
 					tgt_pane = $(this);
 					
