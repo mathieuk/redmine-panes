@@ -1,6 +1,10 @@
 class KanbanController < ApplicationController
 	unloadable
 	before_filter :load_project, :authorize
+	
+	def configure
+	end
+	
 	# Loads the project to be used by the authorize filter to
 	# determine if User.current has permission to invoke the method in question.
 	def load_project
@@ -44,11 +48,8 @@ class KanbanController < ApplicationController
 		@issue = Issue.find(params[:issue_id])
 		
 		if request.post?
-			Rails.logger.info("PARAMS: #{params[:issue].inspect}")
 			@issue.init_journal(User.current)
-		
-			@issue.safe_attributes = params[:issue];
-	
+			@issue.safe_attributes = params[:issue]
 			@issue.save
 			
 			redirect_to :action => 'index', :project_id => @project.id
@@ -59,8 +60,9 @@ class KanbanController < ApplicationController
 	def index
 		@panes = Pane.find(:all, :conditions => "parent_pane_id IS NULL", :order=> "position")
 		
-		@task_trackers = [1,2,4]
-		@urgent_trackers = [5]
+		@may_configure = User.current.allowed_to?(:configure, @project)
+		@task_trackers = TrackerConfig.find_all_by_tracker_type_and_project_id('task', @project.id)
+		@urgent_trackers = TrackerConfig.find_all_by_tracker_type_and_project_id('urgent', @project.id)
 	end
 	
 end

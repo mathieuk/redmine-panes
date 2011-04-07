@@ -1,4 +1,7 @@
 <h2>Kanban Board</h2>
+<% if @may_configure %>
+	<%= link_to "Configure board", {:controller => :kanban, :action => :configure, :project_id => @project} %>
+<% end %>
 
 <div id="dialog-container" style="width: 800px"></div>
 
@@ -47,12 +50,12 @@
 			<% if pane.subpanes.count > 0 %>
 				<% pane.subpanes.each do |subpane| %>
 					<td valign="top" id="pane-<%= pane.key %>" class="pane <%= subpane.key %> subpane" data-parentpane="<%= pane.key %>" data-statusid="<%= subpane.status.id; %>">
-						<%= render :partial => 'stories', :object => subpane.issues(@task_trackers) %>
+						<%= render :partial => 'stories', :object => subpane.issues(@task_trackers.collect { |t| t.tracker_id }) %>
 					</td>
 				<% end %>
 			<% else %>
 				<td valign="top" id="pane-<%= pane.key %>" class="pane <%= pane.key %>" data-parentpane="<%= pane.key %>" data-statusid="<%= pane.status.id; %>">
-					<%= render :partial => 'stories', :object => pane.issues(@task_trackers) %>
+					<%= render :partial => 'stories', :object => pane.issues(@task_trackers.collect { |t| t.tracker_id }) %>
 				</td>
 			<% end %>
 		<% end %>
@@ -67,12 +70,12 @@
 			<% if pane.subpanes.count > 0 %>
 				<% pane.subpanes.each do |subpane| %>
 					<td valign="top" class="pane <%= pane.key %>" data-statusid="<%= subpane.status.id; %>">
-						<%= render :partial => 'stories', :object => subpane.issues(@urgent_trackers) %>
+						<%= render :partial => 'stories', :object => subpane.issues(@urgent_trackers.collect { |t| t.tracker_id }) %>
 					</td>
 				<% end %>
 			<% else %>
 				<td valign="top" class="pane <%= pane.key %>" data-statusid="<%= pane.status.id; %>" height="50">
-					<%= render :partial => 'stories', :object => pane.issues(@urgent_trackers) %>
+					<%= render :partial => 'stories', :object => pane.issues(@urgent_trackers.collect { |t| t.tracker_id }) %>
 				</td>
 			<% end %>
 		<% end %>
@@ -120,3 +123,28 @@
 	}
 	
 </script>
+
+<style type="text/css">
+<% 
+	@task_trackers.each do |tracker_config| 
+%>
+	.worktype-<%=tracker_config.tracker.name.downcase%> { 
+		background-color: <%= tracker_config.color %>;
+	}
+<% end %> 
+
+<% 
+	@urgent_trackers.each do |tracker_config| 
+%>
+	.worktype-<%=tracker_config.tracker.name.downcase%> { 
+		background-color: <%= tracker_config.color %>;
+		color: white;
+	}
+	.worktype-<%=tracker_config.tracker.name.downcase%> a { 
+		color: white;
+	}
+	
+<% end %> 
+
+
+</style>

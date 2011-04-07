@@ -4,7 +4,7 @@
 	width: 160px;
 }
 
-.worktype-bug {
+/*.worktype-bug {
 	background: #FFDBE1;
 }
 
@@ -23,7 +23,7 @@
 
 .worktype-urgent a { 
 	color: white !important;
-}
+}*/
 
 .story {
 	position: relative;

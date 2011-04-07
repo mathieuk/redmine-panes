@@ -1,0 +1,39 @@
+<h2>Configure Kanban board</h2>
+
+<p>This page will let you select the various trackers, and a color scheme to go with it.</p>
+<form action="" method="post">
+	<h3>Trackers</h3>
+	
+	<label>Select all the trackers you want to use as task trackers:</label>
+	<table>
+		<tr>
+			<td>
+				<%= select('tasks[0]', 'tracker', (["--- #{l(:actionview_instancetag_blank_option)} ---"] + @project.trackers)) %>
+			</td>
+			<td>
+				<input type="text" name="tasks[0][color]"> <a href="#" class="add-tracker-row">add row</a>
+			</td>
+		</tr>
+	</table>
+	<br />
+	<label>Select the tracker for Urgent trackers, or leave empty to disable:</label>
+	<table>
+		<tr>
+			<td>
+				<%= select('urgent', 'tracker', (["--- #{l(:actionview_instancetag_blank_option)} ---"] + @project.trackers)) %>
+			</td>
+			<td>
+				<input type="text" name="tasks[0][color]">
+			</td>
+		</tr>
+	</table>
+	<br /><br />
+	<input type="submit" value="Save my changes" />
+	<%= link_to "Cancel", :controller => :kanban, :action => :index, :project_id => @project %>
+</form>
+
+<script>
+
+(function($) { 
+	$(document).ready(function() { })
+})(jQuery)
