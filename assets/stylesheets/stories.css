@@ -4,27 +4,6 @@
 	width: 160px;
 }
 
-/*.worktype-bug {
-	background: #FFDBE1;
-}
-
-.worktype-feature {
-	background: #CDE2FF;
-}
-
-.worktype-refactoring {
-	background: #C2E2B9;
-}
-
-.worktype-urgent { 
-	background: #990108;
-	color: white !important;
-}
-
-.worktype-urgent a { 
-	color: white !important;
-}*/
-
 .story {
 	position: relative;
 	border: 1px solid #B3B3B3;

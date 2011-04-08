@@ -20,7 +20,7 @@
 					<% else %>
 						<%= story.assigned_to.name(:firstname) %>
 					<% end %>
-				/ ETA: <%= story.estimated_hours ? story.estimated_hours.to_s + 'H' : '-' %><br />
+				/ EST: <%= story.estimated_hours ? story.estimated_hours.to_s + 'H' : '-' %><br />
 				</small>
 			</div>
 			<%= avatar(story.assigned_to, :size => "32") if story.respond_to?(:assigned_to) %>
