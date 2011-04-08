@@ -59,29 +59,31 @@ jQuery.noConflict();
 					if (e.stopPropagation) e.stopPropagation(); // stops the browser from redirecting...why???					
 					$(this).removeClass("over");
 					
+					var dropped_story = document.getElementById(e.dataTransfer.getData('Text'));					
+					
 					// Find the Work In Progress Limit for this pane. 
 					wiplimit = 0; // 0 = unlimited
 					current_wip_in_pane = 0;
+					
+					src_pane = $(dropped_story).parents('.pane')[0];
+					tgt_pane = $(this);
+					moving_between_subpanes = false;
 					
 					if ($(this).data('parentpane'))
 					{
 						parentpane          = $(this).data('parentpane')
 						wiplimit            = $('#pane-' + parentpane).data('wiplimit')
 						current_wip_in_pane = $('td[data-parentpane="' + parentpane + '"]').find('ol.stories').children().length;
+						
+						moving_between_subpanes = parentpane == $(src_pane).data('parentpane');
 					}
 					
-					var dropped_story = document.getElementById(e.dataTransfer.getData('Text'));					
-					if (wiplimit > 0 && current_wip_in_pane + 1 > wiplimit)
+					if (!moving_between_subpanes && wiplimit > 0 && current_wip_in_pane + 1 > wiplimit)
 					{
 						$(this).effect('highlight', {color: '#FD0B00'}, 1500);
 						return false;
 					}
-						
-
-					src_pane = $(dropped_story).parents('.pane')[0];
-					tgt_pane = $(this);
 					
-
 					move_story_to_pane(dropped_story, tgt_pane);
 									
 					issue_id  = $(dropped_story).data('issueid');
