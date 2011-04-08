@@ -15,10 +15,9 @@
 	<b>Legend:</b>
 	
 	<ol id="legend" >
-		<li class="worktype-bug">Bug</li>
-		<li class="worktype-feature">Feature</li>
-		<li class="worktype-support">Support</li>
-		<li class="worktype-refactoring">Refactoring</li>
+		<% (@task_trackers + @urgent_trackers).each do |tracker_config| %>
+		<li class="worktype-<%= tracker_name_to_css_class (tracker_config.tracker.name) %>"><%= tracker_config.tracker.name %></li>
+		<% end %>
 	</ol>
 </div>
 
@@ -128,7 +127,7 @@
 <% 
 	@task_trackers.each do |tracker_config| 
 %>
-	.worktype-<%=tracker_config.tracker.name.downcase%> { 
+	.worktype-<%= tracker_name_to_css_class (tracker_config.tracker.name) %> { 
 		background-color: <%= tracker_config.color %>;
 	}
 <% end %> 
@@ -136,11 +135,11 @@
 <% 
 	@urgent_trackers.each do |tracker_config| 
 %>
-	.worktype-<%=tracker_config.tracker.name.downcase%> { 
+	.worktype-<%= tracker_name_to_css_class (tracker_config.tracker.name) %> { 
 		background-color: <%= tracker_config.color %>;
 		color: white;
 	}
-	.worktype-<%=tracker_config.tracker.name.downcase%> a { 
+	.worktype-<%= tracker_name_to_css_class (tracker_config.tracker.name) %> a { 
 		color: white;
 	}
 	

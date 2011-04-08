@@ -2,7 +2,7 @@
 <% stories.each do |story| %>
 	<li>
 		<div class="story-wrapper" id="story-<%= story.id %>" data-issueid="<%= story.id %>">
-			<div class="story worktype-<%=story.tracker.name.downcase %> <%=story.priority.name.downcase%>" >
+			<div class="story worktype-<%= tracker_name_to_css_class (story.tracker.name) %> <%=story.priority.name.downcase%>" >
 				<div class="emblem"></div>
 				<%= link_to("##{story.id}: #{story.subject}", {:controller => "issues", :action => "show", :id => story}) %>
 				<p>
