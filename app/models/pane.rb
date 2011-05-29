@@ -7,6 +7,6 @@ class Pane < ActiveRecord::Base
 	belongs_to :status, :class_name => "IssueStatus", :foreign_key => "status_id"
 
 	def issues (tracker_ids=[])
-		Issue.find :all, :conditions => "status_id = #{self.status_id} AND tracker_id IN (" + tracker_ids.join(',') + ")"
+		Issue.find :all, :conditions => "status_id = #{self.status_id} AND tracker_id IN (" + tracker_ids.join(',') + ") AND parent_id IS NULL"
 	end
 end

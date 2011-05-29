@@ -53,6 +53,17 @@
 	cursor: move;
 }
 
+.story .subtasks 
+{
+	padding-left: 20px;
+	padding-bottom: 10px;
+}
+.story .subtasks .closed a { 
+	text-decoration: line-through;
+} 
+.story .subtasks a {
+	font-weight: normal;
+}
 .emblem {
 
 }

@@ -60,8 +60,8 @@ class KanbanController < ApplicationController
 	def index
 		@panes = Pane.find(:all, :conditions => "parent_pane_id IS NULL", :order=> "position")
 		
-		@may_configure = User.current.allowed_to?(:configure, @project)
-		@task_trackers = TrackerConfig.find_all_by_tracker_type_and_project_id('task', @project.id)
+		@may_configure   = User.current.allowed_to?(:configure, @project)
+		@task_trackers   = TrackerConfig.find_all_by_tracker_type_and_project_id('task', @project.id)
 		@urgent_trackers = TrackerConfig.find_all_by_tracker_type_and_project_id('urgent', @project.id)
 	end
 	

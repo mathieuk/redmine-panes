@@ -13,6 +13,17 @@
 				Due: <%= story.due_date %><br />
 				<% end %>
 				<br />
+
+				<% subtasks = Issue.find (:all, :conditions => "parent_id = #{story.id}") %>
+				
+				<% if subtasks.count > 0 %>
+					<em>Subtasks</em>
+					<ul class="subtasks">
+						<% subtasks.each do |task| %>
+						<li class="<%= task.closed? ? 'closed' : '' %>"><%= link_to("##{task.id}: #{task.subject}", {:controller => "issues", :action => "show", :id => task}) %></li>
+						<% end %>
+					</ul>
+				<% end %>
 				
 				<small>
 					<% if story.assigned_to.nil? %>
