@@ -5,6 +5,8 @@
 			<div class="story worktype-<%= tracker_name_to_css_class (story.tracker.name) %> <%=story.priority.name.downcase%>" >
 				<div class="emblem"></div>
 				<%= link_to("##{story.id}: #{story.subject}", {:controller => "issues", :action => "show", :id => story}) %>
+				<% subtasks = Issue.find (:all, :conditions => "parent_id = #{story.id}", :limit => 5) %>
+				
 				<p>
 				<br />Age: <%= distance_of_time_in_words story.start_date, Time.now %><br />
 				</p>
@@ -14,15 +16,17 @@
 				<% end %>
 				<br />
 
-				<% subtasks = Issue.find (:all, :conditions => "parent_id = #{story.id}") %>
+
 				
 				<% if subtasks.count > 0 %>
-					<em>Subtasks</em>
+					<em>Subtasks (<%=  Issue.find (:all, :conditions => "parent_id = #{story.id}").count %> total)</em>
 					<ul class="subtasks">
 						<% subtasks.each do |task| %>
-						<li class="<%= task.closed? ? 'closed' : '' %>"><%= link_to("##{task.id}: #{task.subject}", {:controller => "issues", :action => "show", :id => task}) %></li>
+						<li class="status-<%=task.status.name.downcase%> <%= task.closed? ? 'closed' : '' %>"><%= link_to("##{task.id}: #{task.subject}", {:controller => "issues", :action => "show", :id => task}) %></li>
 						<% end %>
 					</ul>
+					[<%= link_to("view all subtasks", {:controller => "kanban", :action => "index", :project_id => story.project, :parent_issue_id => story.id}) %>]
+					
 				<% end %>
 				
 				<small>
