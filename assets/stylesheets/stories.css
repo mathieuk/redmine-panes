@@ -20,11 +20,13 @@
 	font-family: myriad-pro-condensed-1, myriad-pro-condensed-2, 'Helvetica Neue', Arial, 'Lucida Grande', sans-serif;
 	font-size: 11px;
 	width: 125px;
+	height: 125px;
 	text-decoration: none;
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
 	vertical-align: top;
 	padding: 5px;
 	margin: 4px 2px;
+	margin-bottom: 8px;
 	z-index: 1;
 }
 

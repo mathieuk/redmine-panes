@@ -1,46 +1,53 @@
 <ol class="stories">
 <% stories.each do |story| %>
+	<% 
+		all_subtasks = story.descendants.sort_by(&:lft)
+		open_subtasks = all_subtasks.select { |subtask| !subtask.closed? } 
+		closed_subtask_count = all_subtasks.count - open_subtasks.count
+		
+		has_subtasks = all_subtasks.count > 0
+		
+		if (open_subtasks.count > 0 )
+			subtask_perc = ((closed_subtask_count.to_f / all_subtasks.count.to_f).to_f * 100).to_i
+		else
+			subtask_perc = 100
+		end
+	%>
+
 	<li>
-		<div class="story-wrapper" id="story-<%= story.id %>" data-issueid="<%= story.id %>">
-			<div class="story worktype-<%= tracker_name_to_css_class (story.tracker.name) %> <%=story.priority.name.downcase%>" >
-				<div class="emblem"></div>
-				<%= link_to("##{story.id}: #{story.subject}", {:controller => "issues", :action => "show", :id => story}) %>
-				<% subtasks = Issue.find (:all, :conditions => "parent_id = #{story.id}", :limit => 5) %>
-				
-				<p>
-				<br />Age: <%= distance_of_time_in_words story.start_date, Time.now %><br />
-				</p>
-				
-				<% if story.due_date %>
-				Due: <%= story.due_date %><br />
-				<% end %>
-				<br />
-
-
-				
-				<% if subtasks.count > 0 %>
-					<em>Subtasks (<%=  Issue.find (:all, :conditions => "parent_id = #{story.id}").count %> total)</em>
-					<ul class="subtasks">
-						<% subtasks.each do |task| %>
-						<li class="status-<%=task.status.name.downcase%> <%= task.closed? ? 'closed' : '' %>"><%= link_to("##{task.id}: #{task.subject}", {:controller => "issues", :action => "show", :id => task}) %></li>
-						<% end %>
-					</ul>
-					[<%= link_to("view all subtasks", {:controller => "kanban", :action => "index", :project_id => story.project, :parent_issue_id => story.id}) %>]
-					
-				<% end %>
-				
-				<small>
-					<% if story.assigned_to.nil? %>
-						???
-					<% else %>
-						<%= story.assigned_to.name(:firstname) %>
+			<div class="story-wrapper" id="story-<%= story.id %>" data-issueid="<%= story.id %>">
+				<div class="subtask-wrapper worktype-<%= tracker_name_to_css_class (story.tracker.name) %>" style="border-radius: 4px; position: absolute; bottom: -3px; height: 125px; width: 130px; right: -5px; border: 1px solid #6B7699; <%= "display: none" unless (has_subtasks) %>">
+				</div>
+			
+				<div class="story worktype-<%= tracker_name_to_css_class (story.tracker.name) %> <%=story.priority.name.downcase%>">
+					<div class="emblem"></div>
+					<%= link_to("##{story.id}: #{story.subject}", {:controller => "issues", :action => "show", :id => story})  %>
+			
+					<p style="padding-top: 5px">
+					<em>Age:</em> <%= distance_of_time_in_words(story.start_date, Time.now) %><br /><br />
+					<% if (has_subtasks) %>
+					<em>Subtasks:</em><br /><%= open_subtasks.count %> of <%= all_subtasks.count %> (<%=subtask_perc%>% done)
+					[<%= link_to("view", {:controller => "kanban", :action => "index", :project_id => story.project, :parent_issue_id => story.id}) %>]
 					<% end %>
-				/ EST: <%= story.estimated_hours ? story.estimated_hours.to_s + 'H' : '-' %><br />
-				</small>
+					</p>
+					
+			
+					<% if story.due_date %>
+					Due: <%= story.due_date %><br />
+					<% end %>
+					<br />
+			
+					<small>
+						<% if story.assigned_to.nil? %>
+							???
+						<% else %>
+							<%= story.assigned_to.name(:firstname) %>
+						<% end %>
+					/ EST: <%= story.estimated_hours ? story.estimated_hours.to_s + 'H' : '-' %><br />
+					</small>
+				</div>
+				<%= avatar(story.assigned_to, :size => "32") if story.respond_to?(:assigned_to) %>
 			</div>
-			<%= avatar(story.assigned_to, :size => "32") if story.respond_to?(:assigned_to) %>
-						
-		</div>
 	</li>
 <% end -%>
 </ol>

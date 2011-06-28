@@ -11,11 +11,13 @@ class Pane < ActiveRecord::Base
 		parent_id = "NULL"
 		
 		if (parent_issue_id)
-			parent_id = parent_issue_id
+			parent_id = " = " + parent_issue_id.to_s
+		else
+			parent_id = " IS NULL"
 		end
 			
 		Issue.find :all, 
-			:conditions => "status_id = #{self.status_id} AND tracker_id IN (" + tracker_ids.join(',') + ") AND parent_id IS " + parent_id
+			:conditions => "status_id = #{self.status_id} AND project_id = " + project.id.to_s + " AND tracker_id IN (" + tracker_ids.join(',') + ") AND parent_id " + parent_id
 	end
 		
 end
